@@ -1,6 +1,7 @@
 # agent_mode/smart_completion.py
 
 import os
+from typing import List
 
 DEV_MODE = os.getenv("AGENT_MODE_DEV", "false").lower() == "true"
 
@@ -16,24 +17,46 @@ ALIASES = {
     "log_table": "git_log_table",
 }
 
-def get_snippet_by_alias(user_input: str) -> str:
-    key = user_input.strip().lower()
+class SnippetNotFoundError(Exception):
+    pass
+
+def get_snippet_by_alias(alias: str) -> str:
+    """Retrieve code snippet by alias name.
+    
+    Args:
+        alias: Snippet identifier
+    
+    Returns:
+        Code snippet content
+    
+    Raises:
+        SnippetNotFoundError: If alias doesn't exist
+    """
+    key = alias.strip().lower()
 
     if key in SNIPPET_LIBRARY:
         return SNIPPET_LIBRARY[key]
     
     if key in ALIASES:
         snippet_key = ALIASES[key]
-        return SNIPPET_LIBRARY.get(snippet_key, "# Unknown alias")
+        if snippet_key not in SNIPPET_LIBRARY:
+            raise SnippetNotFoundError(f"Alias '{alias}' not found")
+        return SNIPPET_LIBRARY[snippet_key]
 
-    return "# No snippet found"
+    raise SnippetNotFoundError(f"Alias '{alias}' not found")
 
 
-def suggest_completion(partial_command: str) -> str:
+def suggest_completion(partial_code: str, context: str = "") -> List[str]:
+    """Suggest code completions based on partial input.
+    
+    Args:
+        partial_code: Incomplete code snippet
+        context: Additional context for better suggestions
+    
+    Returns:
+        List of completion suggestions
     """
-    Suggest command or snippet completions based on partial input.
-    """
-    matches = [cmd for cmd in SNIPPET_LIBRARY if cmd.startswith(partial_command)]
+    matches = [cmd for cmd in SNIPPET_LIBRARY if cmd.startswith(partial_code)]
     if not matches:
-        return "# No suggestion"
-    return "\n".join([f"{m} → {SNIPPET_LIBRARY[m]}" for m in matches])
+        return []
+    return [f"{m} → {SNIPPET_LIBRARY[m]}" for m in matches]

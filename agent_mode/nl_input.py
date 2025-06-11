@@ -11,6 +11,25 @@ MOCK_RESPONSES = {
     "git log but only show the last 5 commits in a table": "git log -n 5 --pretty=format:'%h | %an | %s'"
 }
 
+def parse_natural_language_input(user_input: str) -> dict:
+    """Parse natural language input into structured data.
+    
+    Args:
+        user_input: Natural language command/request
+    
+    Returns:
+        Parsed components in dictionary format
+    
+    Raises:
+        ValueError: For unparseable input
+    """
+    if not user_input.strip():
+        raise ValueError("Input cannot be empty")
+        
+    # TODO: Implement parsing logic here
+    # For now, just return an empty dictionary
+    return {}
+
 def translate_nl_to_command(prompt: str) -> str:
     """
     Translate natural language prompt into shell command.
