@@ -5,7 +5,7 @@ import subprocess
 class LLMConnectionError(Exception):
     pass
 
-def query_llm(prompt: str) -> str:
+def ask_llm(prompt: str) -> str:
     """
     Send prompt to local LLM using Ollama or llama.cpp
     """
@@ -36,6 +36,6 @@ def get_llm_response(prompt: str, model: str = "gpt-4") -> str:
         LLMConnectionError: On connection failures
     """
     try:
-        return query_llm(prompt)
+        return ask_llm(prompt)
     except Exception as e:
         raise LLMConnectionError(f"LLM request failed: {str(e)}")

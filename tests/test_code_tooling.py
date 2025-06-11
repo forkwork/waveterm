@@ -9,6 +9,7 @@ def mock_ask_llm(prompt):
 def test_convert_command_dev_mode(monkeypatch):
     """Test dev mode functionality"""
     monkeypatch.setenv("AGENT_MODE_DEV", "true")
+    monkeypatch.setattr('agent_mode.code_tooling.ask_llm', mock_ask_llm)
     result = convert_command("ls -l", "python")
     assert "[DEV]" in result
 

@@ -9,12 +9,15 @@ SNIPPET_LIBRARY = {
     "create_venv": "python3 -m venv venv && source venv/bin/activate",
     "docker_cleanup": "docker system prune -a",
     "git_log_table": "git log -n 5 --pretty=format:'%h | %an | %s'",
+    "gitlog": "git log --oneline",
+    "status": "git status"
 }
 
 ALIASES = {
     "venv": "create_venv",
     "clean_docker": "docker_cleanup",
     "log_table": "git_log_table",
+    "gl": "gitlog"
 }
 
 class SnippetNotFoundError(Exception):
