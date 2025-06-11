@@ -1,4 +1,5 @@
 import pytest
+from unittest.mock import MagicMock
 from agent_mode.explain_anything import explain_thing
 
 # Test cases
@@ -11,7 +12,7 @@ def test_explain_thing_dev_mode(monkeypatch):
 def test_explain_thing_prod_mode(monkeypatch):
     """Test production mode functionality"""
     monkeypatch.setenv("AGENT_MODE_DEV", "false")
-    monkeypatch.setattr('agent_mode.explain_anything.ask_llm', 
-                       lambda x: f"Explanation for: {x}")
+    mock_ask_llm = MagicMock(return_value="Explanation for: git status")
+    monkeypatch.setattr('agent_mode.explain_anything.ask_llm', mock_ask_llm)
     result = explain_thing("git status")
     assert "Explanation for:" in result
